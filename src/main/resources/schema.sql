@@ -5,27 +5,29 @@ drop TABLE IF EXISTS ship_owner;
 
 CREATE TABLE ship
 (
-ship_id INTEGER PRIMARY KEY,
+id SERIAL PRIMARY KEY ,
 ship_name TEXT,
 imo_number TEXT
 );
 
 CREATE TABLE category
 (
- category_id INTEGER PRIMARY KEY,
- ship_id INTEGER REFERENCES ship(ship_id),
+ id SERIAL PRIMARY KEY,
+ ship_id INTEGER REFERENCES ship(id),
  ship_type TEXT,
  ship_tonnage INTEGER
 );
 
 CREATE TABLE owner
 (
-owner_id INTEGER PRIMARY KEY,
+id SERIAL PRIMARY KEY,
 owner_name TEXT
 );
 
 CREATE TABLE ship_owner
 (
-ship_id INTEGER REFERENCES ship(ship_id),
-owner_id INTEGER REFERENCES owner(owner_id)
+ship_id INTEGER REFERENCES ship(id),
+owner_id INTEGER REFERENCES owner(id)
 );
+
+CREATE UNIQUE INDEX idx_category_ship_id ON category(ship_id);
