@@ -40,7 +40,6 @@ public class ShipController {
 	 */
 	@RequestMapping("/ships/{id}")
 	public Optional<Ship> getShipById(@PathVariable long id) {
-		System.out.println(repo.findById(id));
 		return repo.findById(id);
 	}
 
@@ -60,11 +59,11 @@ public class ShipController {
 	 *
 	 * @param shipId  id of the ship to be updated.
 	 * @param newShip the new ship.
-	 * @return the update ship entity.
+	 * @return the updated ship entity.
 	 * @throws Exception
 	 */
 	@PutMapping("/ships/{id}")
-	public ResponseEntity<Ship> updatePhone(@PathVariable(value = "id") Long shipId, @Valid @RequestBody Ship newShip)
+	public ResponseEntity<Ship> updateShip(@PathVariable(value = "id") Long shipId, @Valid @RequestBody Ship newShip)
 			throws Exception {
 
 		Ship oldShip = repo.findById(shipId).orElseThrow(() -> new Exception("Ship " + shipId + " not found"));
@@ -79,12 +78,10 @@ public class ShipController {
 	 * Delete Ship.
 	 *
 	 * @param shipId id of the ship to be deleted.
-	 *
-	 * @return the update ship entity.
 	 * @throws Exception
 	 */
 	@DeleteMapping("/ships/{id}")
-	public void updatePhone(@PathVariable(value = "id") Long shipId) throws Exception {
+	public void updateShip(@PathVariable(value = "id") Long shipId) throws Exception {
 
 		Ship ship = repo.findById(shipId).orElseThrow(() -> new Exception("Ship " + shipId + " not found"));
 		repo.deleteById(shipId);

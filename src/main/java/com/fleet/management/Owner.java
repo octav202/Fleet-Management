@@ -1,9 +1,18 @@
 package com.fleet.management;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "owner")
@@ -15,6 +24,15 @@ public class Owner {
 
 	@Column(name = "owner_name", columnDefinition = "text")
 	private String name;
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "ship_owner",
+        joinColumns = { @JoinColumn(name = "owner_id") },
+        inverseJoinColumns = { @JoinColumn(name = "ship_id") }
+    )
+	@JsonIgnoreProperties(value="owners")
+    Set<Ship> ships = new HashSet<>();
 
 	public long getId() {
 		return id;
@@ -30,6 +48,14 @@ public class Owner {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Set<Ship> getShips() {
+		return ships;
+	}
+
+	public void setShips(Set<Ship> ships) {
+		this.ships = ships;
 	}
 
 	@Override

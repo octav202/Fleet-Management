@@ -12,3 +12,6 @@ INSERT INTO owner (owner_name) VALUES
 ('Holland America'),
 ('Captain America'),
 ('Carnival');
+
+INSERT INTO ship_owner VALUES
+(1,1), (2,1), (3,3);

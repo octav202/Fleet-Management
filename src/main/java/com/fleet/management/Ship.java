@@ -1,12 +1,18 @@
 package com.fleet.management;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "ship")
@@ -26,6 +32,10 @@ public class Ship implements Serializable {
 
 	@OneToOne(mappedBy = "ship", fetch = FetchType.EAGER)
 	private Category category;
+
+	@ManyToMany(mappedBy = "ships")
+	@JsonIgnoreProperties(value="ships")
+    private Set<Owner> owners = new HashSet<>();
 
 	public long getId() {
 		return id;
@@ -57,6 +67,14 @@ public class Ship implements Serializable {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public Set<Owner> getOwners() {
+		return owners;
+	}
+
+	public void setOwners(Set<Owner> owners) {
+		this.owners = owners;
 	}
 
 }
