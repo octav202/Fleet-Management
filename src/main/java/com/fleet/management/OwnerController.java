@@ -80,8 +80,15 @@ public class OwnerController {
 	 * @throws Exception
 	 */
 	@DeleteMapping("/owners/{id}")
-	public void updateOwner(@PathVariable(value = "id") Long ownerId) throws Exception {
+	public void deleteOwner(@PathVariable(value = "id") Long ownerId) throws Exception {
 		Owner owner = repo.findById(ownerId).orElseThrow(() -> new Exception("Owner " + ownerId + " not found"));
+
+		/*
+		for (Ship s : owner.getShips()) {
+			s.getOwners().remove(owner);
+		}
+		*/
+
 		repo.deleteById(ownerId);
 	}
 

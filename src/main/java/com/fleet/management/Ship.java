@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -30,12 +33,17 @@ public class Ship implements Serializable {
 	@Column(name = "imo_number", columnDefinition = "text")
 	private String imoNumber;
 
-	@OneToOne(mappedBy = "ship", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "ship", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Category category;
 
-	@ManyToMany(mappedBy = "ships")
-	@JsonIgnoreProperties(value="ships")
-    private Set<Owner> owners = new HashSet<>();
+	// @ManyToMany(mappedBy = "ships")
+	// @JsonIgnoreProperties(value="ships")
+
+	@ManyToMany()
+	@JoinTable(name = "ship_owner", joinColumns = { @JoinColumn(name = "ship_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "owner_id") })
+	@JsonIgnoreProperties(value = "owners")
+	private Set<Owner> owners = new HashSet<>();
 
 	public long getId() {
 		return id;

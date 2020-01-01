@@ -25,14 +25,14 @@ public class Owner {
 	@Column(name = "owner_name", columnDefinition = "text")
 	private String name;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany()
     @JoinTable(
         name = "ship_owner",
         joinColumns = { @JoinColumn(name = "owner_id") },
         inverseJoinColumns = { @JoinColumn(name = "ship_id") }
     )
-	@JsonIgnoreProperties(value="owners")
-    Set<Ship> ships = new HashSet<>();
+	@JsonIgnoreProperties(value = "owners")
+	Set<Ship> ships = new HashSet<>();
 
 	public long getId() {
 		return id;
