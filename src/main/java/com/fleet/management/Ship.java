@@ -8,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -25,6 +27,7 @@ public class Ship implements Serializable {
 
 	@Id
 	@Column(name = "id", columnDefinition = "integer")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(name = "ship_name", columnDefinition = "text")
@@ -39,7 +42,7 @@ public class Ship implements Serializable {
 	// @ManyToMany(mappedBy = "ships")
 	// @JsonIgnoreProperties(value="ships")
 
-	@ManyToMany()
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "ship_owner", joinColumns = { @JoinColumn(name = "ship_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "owner_id") })
 	@JsonIgnoreProperties(value = "owners")
@@ -83,6 +86,12 @@ public class Ship implements Serializable {
 
 	public void setOwners(Set<Owner> owners) {
 		this.owners = owners;
+	}
+
+	@Override
+	public String toString() {
+		return "Ship [id=" + id + ", name=" + name + ", imoNumber=" + imoNumber + ", category=" + category + ", owners="
+				+ this.owners + "]";
 	}
 
 }

@@ -6,6 +6,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
@@ -19,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Owner {
 
 	@Id
-	@Column(name = "id", columnDefinition = "integer")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(name = "owner_name", columnDefinition = "text")
 	private String name;
 
-	@ManyToMany()
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "ship_owner",
         joinColumns = { @JoinColumn(name = "owner_id") },

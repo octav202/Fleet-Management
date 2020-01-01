@@ -81,7 +81,7 @@ public class ShipController {
 	 * @throws Exception
 	 */
 	@DeleteMapping("/ships/{id}")
-	public void updateShip(@PathVariable(value = "id") Long shipId) throws Exception {
+	public void deleteShip(@PathVariable(value = "id") Long shipId) throws Exception {
 		Ship ship = repo.findById(shipId).orElseThrow(() -> new Exception("Ship " + shipId + " not found"));
 
 		/*
