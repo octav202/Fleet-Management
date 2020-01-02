@@ -1,4 +1,4 @@
-package com.fleet.management;
+package com.fleet.management.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fleet.management.ResourceNotFoundException;
+import com.fleet.management.models.Ship;
 
 @RestController
 public class ShipController {
@@ -64,9 +67,9 @@ public class ShipController {
 	 */
 	@PutMapping("/ships/{id}")
 	public ResponseEntity<Ship> updateShip(@PathVariable(value = "id") Long shipId, @Valid @RequestBody Ship newShip)
-			throws Exception {
+			throws ResourceNotFoundException {
 
-		Ship oldShip = repo.findById(shipId).orElseThrow(() -> new Exception("Ship " + shipId + " not found"));
+		Ship oldShip = repo.findById(shipId).orElseThrow(() -> new ResourceNotFoundException("Ship " + shipId + " not found"));
 		oldShip.setName(newShip.getName());
 		oldShip.setImoNumber(newShip.getImoNumber());
 		oldShip.setCategory(newShip.getCategory());
@@ -81,8 +84,8 @@ public class ShipController {
 	 * @throws Exception
 	 */
 	@DeleteMapping("/ships/{id}")
-	public void deleteShip(@PathVariable(value = "id") Long shipId) throws Exception {
-		Ship ship = repo.findById(shipId).orElseThrow(() -> new Exception("Ship " + shipId + " not found"));
+	public ResponseEntity<?> deleteShip(@PathVariable(value = "id") Long shipId) throws ResourceNotFoundException {
+		Ship ship = repo.findById(shipId).orElseThrow(() -> new ResourceNotFoundException("Ship " + shipId + " not found"));
 
 		/*
 		for (Owner o : ship.getOwners()) {
@@ -91,5 +94,6 @@ public class ShipController {
 		*/
 
 		repo.deleteById(shipId);
+		return ResponseEntity.ok().build();
 	}
 }

@@ -1,4 +1,4 @@
-package com.fleet.management;
+package com.fleet.management.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fleet.management.ResourceNotFoundException;
+import com.fleet.management.models.Owner;
 
 @RestController
 public class OwnerController {
@@ -64,12 +67,11 @@ public class OwnerController {
 	 */
 	@PutMapping("/owners/{id}")
 	public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id") Long ownerId, @Valid @RequestBody Owner newOwner)
-			throws Exception {
+			throws ResourceNotFoundException {
 
-		Owner oldOwner = repo.findById(ownerId).orElseThrow(() -> new Exception("Owner " + ownerId + " not found"));
+		Owner oldOwner = repo.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException("Owner " + ownerId + " not found"));
 		oldOwner.setName(newOwner.getName());
 		oldOwner.setShips(newOwner.getShips());
-
 		return ResponseEntity.ok(repo.save(oldOwner));
 	}
 
@@ -80,16 +82,16 @@ public class OwnerController {
 	 * @throws Exception
 	 */
 	@DeleteMapping("/owners/{id}")
-	public void deleteOwner(@PathVariable(value = "id") Long ownerId) throws Exception {
-		Owner owner = repo.findById(ownerId).orElseThrow(() -> new Exception("Owner " + ownerId + " not found"));
+	public ResponseEntity<?> deleteOwner(@PathVariable(value = "id") Long ownerId) throws ResourceNotFoundException {
+		Owner owner = repo.findById(ownerId).orElseThrow(() -> new ResourceNotFoundException("Owner " + ownerId + " not found"));
 
 		/*
 		for (Ship s : owner.getShips()) {
 			s.getOwners().remove(owner);
 		}
 		*/
-
 		repo.deleteById(ownerId);
+		return ResponseEntity.ok().build();
 	}
 
 }

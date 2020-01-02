@@ -1,33 +1,115 @@
 package com.fleet.management;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.ResponseEntity;
 
-@SpringBootTest
-class FleetManagementApplicationTests {
+import com.fleet.management.controllers.CategoryController;
+import com.fleet.management.controllers.OwnerController;
+import com.fleet.management.controllers.ShipController;
+import com.fleet.management.models.Category;
+import com.fleet.management.models.Owner;
+import com.fleet.management.models.Ship;
+
+@SpringBootTest(classes = FleetManagementApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(OrderAnnotation.class)
+public class ShipControllerTests {
+
+	@LocalServerPort
+	private int port;
 
 	@Autowired
+	private TestRestTemplate restTemplate;
+	@Autowired
 	ShipController shipController;
-
+	@Autowired
+	OwnerController ownerController;
 	@Autowired
 	CategoryController catController;
 
-	@Autowired
-	OwnerController ownerController;
+	@Test
+	@Order(1)
+	public void integrationTestGetAllShips() {
+		assertTrue(this.restTemplate.getForObject("http://localhost:" + port + "/ships", List.class).size() == 3);
+	}
 
 	@Test
+	@Order(2)
+	public void integrationTestGetShipById() {
+		Ship ship = restTemplate.getForObject("http://localhost:" + port + "/ships/{id}/", Ship.class, 1);
+		assertTrue(ship.getId() == 1);
+		assertEquals(ship.getName(), "Symphony of the seas");
+	}
+
+	@Test
+	@Order(3)
+	public void integrationTestResponseAddShip() {
+		Ship ship = new Ship();
+		ship.setName("Test Response Ship");
+		ship.setImoNumber("777");
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/ships", ship,
+				String.class);
+		assertEquals(200, responseEntity.getStatusCodeValue());
+	}
+
+	@Test
+	@Order(4)
+	public void integrationTestObjectAddShip() {
+		Ship ship = new Ship();
+		ship.setName("Test Object Ship");
+		ship.setImoNumber("987654321");
+		Ship result = restTemplate.postForObject("http://localhost:" + port + "/ships", ship, Ship.class);
+		assertEquals(result.getName(), ship.getName());
+		assertEquals(result.getImoNumber(), ship.getImoNumber());
+	}
+
+	@Test
+	@Order(5)
+	public void integrationTestUpdateShip() {
+
+		Ship updated = new Ship();
+		updated.setName("Updated Test Ship");
+		updated.setImoNumber("Updated IMO Number");
+		restTemplate.put("http://localhost:" + port + "/ships/{id}", updated, 3);
+
+		Ship ship = restTemplate.getForObject("http://localhost:" + port + "/ships/{id}/", Ship.class, 3);
+		assertEquals(ship.getName(), "Updated Test Ship");
+		assertEquals(ship.getImoNumber(), "Updated IMO Number");
+	}
+
+	@Test
+	@Order(6)
+	public void integrationTestDeleteShip() {
+		restTemplate.delete("http://localhost:" + port + "/ships/{id}", 3);
+		assertTrue(restTemplate.getForObject("http://localhost:" + port + "/ships", List.class).size() == 4);
+	}
+
+	/*************************************************
+	 ************ Controller Unit Testing ************
+	 *************************************************/
+
+	@Test
+	@Order(7)
 	void test_add_ship() {
 		int size = shipController.getShips().size();
 
 		Ship ship = new Ship();
 		ship.setImoNumber("2468");
-		ship.setName("Test Ship 1");
+		ship.setName("Test Ship");
 
 		Owner owner = ownerController.getOwnerById(3).get();
 		Set<Owner> owners = new HashSet<>();
@@ -54,6 +136,7 @@ class FleetManagementApplicationTests {
 	}
 
 	@Test
+	@Order(8)
 	void test_delete_ship() {
 
 		// Add a ship to be deleted
@@ -76,6 +159,7 @@ class FleetManagementApplicationTests {
 	}
 
 	@Test
+	@Order(9)
 	void test_get_ship_by_id() {
 
 		// Add a test ship
@@ -92,6 +176,7 @@ class FleetManagementApplicationTests {
 	}
 
 	@Test
+	@Order(10)
 	void test_update_ship() {
 
 		// Update last ship
@@ -115,6 +200,7 @@ class FleetManagementApplicationTests {
 	}
 
 	@Test
+	@Order(11)
 	Category test_add_category(Ship ship) {
 		Category c = new Category();
 		c.setShipTonnage(50000);
@@ -122,68 +208,6 @@ class FleetManagementApplicationTests {
 		c.setShip(ship);
 		assertTrue(catController.addCategory(c) != null);
 		return c;
-	}
-
-	@Test
-	void test_add_owner() {
-
-		int size = ownerController.getOwners().size();
-
-		Owner owner = new Owner();
-		owner.setName("Test Owner");
-
-		Set<Ship> ships = new HashSet<>();
-		ships.add(shipController.getShipById(1).get());
-		ships.add(shipController.getShipById(2).get());
-		owner.setShips(ships);
-
-		// Test return value
-		assertTrue(ownerController.addOwner(owner) != null);
-
-		// Test that owners size has increased by 1
-		assertTrue(ownerController.getOwners().size() == size + 1);
-
-		// Test that the ships were added for this owner
-		Owner addedOwner = ownerController.getOwners().get(ownerController.getOwners().size() - 1);
-		assertTrue(addedOwner.getShips().size() == 2);
-	}
-
-	@Test
-	void test_delete_owner() {
-
-		int size = ownerController.getOwners().size();
-
-		// Delete owner (id-1) who owns two ships
-		Owner owner = ownerController.getOwnerById(1).get();
-		try {
-			ownerController.deleteOwner(owner.getId());
-		} catch (Exception e) {
-		}
-
-		// Test that the owners size has decreased by 1
-		assertTrue(ownerController.getOwners().size() == size - 1);
-	}
-
-	@Test
-	void test_update_owner() {
-		Owner owner = ownerController.getOwnerById(2).get();
-
-		// Add one ship(id-3) to owner(id-2)
-		Set<Ship> ships = new HashSet<>();
-		ships.add(shipController.getShipById(3).get());
-		owner.setShips(ships);
-
-		// Update Owner name
-		owner.setName("Updated");
-		owner.setShips(ships);
-		try {
-			ownerController.updateOwner(owner.getId(), owner);
-		} catch (Exception e) {
-		}
-
-		Owner updated = ownerController.getOwnerById(2).get();
-		assertTrue(updated.getName().equals("Updated"));
-		assertTrue(updated.getShips().size() == 1);
 	}
 
 }

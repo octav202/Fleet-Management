@@ -1,17 +1,16 @@
-package com.fleet.management;
+package com.fleet.management.models;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -29,11 +28,8 @@ public class Owner {
 	private String name;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "ship_owner",
-        joinColumns = { @JoinColumn(name = "owner_id") },
-        inverseJoinColumns = { @JoinColumn(name = "ship_id") }
-    )
+	@JoinTable(name = "ship_owner", joinColumns = { @JoinColumn(name = "owner_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "ship_id") })
 	@JsonIgnoreProperties(value = "owners")
 	Set<Ship> ships = new HashSet<>();
 

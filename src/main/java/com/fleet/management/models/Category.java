@@ -1,4 +1,4 @@
-package com.fleet.management;
+package com.fleet.management.models;
 
 import java.io.Serializable;
 
