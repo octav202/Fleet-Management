@@ -5,6 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.fleet.management.models.Owner;
 
+/**
+ * Owners repository used for basic CRUD operations..
+ *
+ * @author Octav
+ *
+ */
 @Repository
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
 }

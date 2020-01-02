@@ -16,6 +16,13 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Class representing the Owner object.
+ * The Owner entity is mapped to the owner table.
+ *
+ * @author Octav
+ *
+ */
 @Entity
 @Table(name = "owner")
 public class Owner {
@@ -33,33 +40,63 @@ public class Owner {
 	@JsonIgnoreProperties(value = "owners")
 	Set<Ship> ships = new HashSet<>();
 
+	/**
+	 * Get object id.
+	 *
+	 * @return the id.
+	 */
 	public long getId() {
 		return id;
 	}
 
+	/**
+	 * Set object id.
+	 * This should not be used explicitly, since the id's are auto-generated
+	 *
+	 * @param id
+	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get owner name.
+	 *
+	 * @return owner name.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set owner name.
+	 *
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Get the list of ships owned by this owner.
+	 *
+	 * @return list of ships.
+	 */
 	public Set<Ship> getShips() {
 		return ships;
 	}
 
+	/**
+	 * Set the list of ships owned by this owner.
+	 *
+	 * @param ships list of ships.
+	 */
 	public void setShips(Set<Ship> ships) {
 		this.ships = ships;
 	}
 
 	@Override
 	public String toString() {
-		return "Owner [id=" + id + ", name=" + name + "]";
+		return "Owner [id=" + id + ", name=" + name + ", ships=" + ships + "]";
 	}
-
 }

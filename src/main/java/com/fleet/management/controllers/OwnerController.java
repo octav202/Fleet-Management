@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fleet.management.ResourceNotFoundException;
 import com.fleet.management.models.Owner;
 
+/**
+ * Owners REST API controller.
+ *
+ * @author Octav
+ *
+ */
 @RestController
 public class OwnerController {
 
@@ -26,7 +32,7 @@ public class OwnerController {
 	OwnerRepository repo;
 
 	/**
-	 * Fetch all owners.
+	 * Get all owners.
 	 *
 	 * @return list of owners.
 	 */
@@ -63,7 +69,7 @@ public class OwnerController {
 	 * @param ownerId  id of the owner to be updated.
 	 * @param newOwner the new owner.
 	 * @return the updated owner entity.
-	 * @throws Exception
+	 * @throws @{ResourceNotFoundException} if the owner was not found.
 	 */
 	@PutMapping("/owners/{id}")
 	public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id") Long ownerId, @Valid @RequestBody Owner newOwner)
@@ -79,7 +85,7 @@ public class OwnerController {
 	 * Delete Owner.
 	 *
 	 * @param ownerId id of the owner to be deleted.
-	 * @throws Exception
+	 * @throws @{ResourceNotFoundException} if the owner was not found.
 	 */
 	@DeleteMapping("/owners/{id}")
 	public ResponseEntity<?> deleteOwner(@PathVariable(value = "id") Long ownerId) throws ResourceNotFoundException {

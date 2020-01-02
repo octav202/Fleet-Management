@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fleet.management.ResourceNotFoundException;
 import com.fleet.management.models.Category;
 
+/**
+ * Categories REST API controller.
+ *
+ * @author Octav
+ *
+ */
 @RestController
 public class CategoryController {
 
@@ -26,7 +32,7 @@ public class CategoryController {
 	CategoryRepository repo;
 
 	/**
-	 * Fetch all categories..
+	 * Get all categories.
 	 *
 	 * @return list of categories.
 	 */
@@ -63,11 +69,11 @@ public class CategoryController {
 	 * @param categoryId  id of the category to be updated.
 	 * @param newCategory the new category.
 	 * @return the updated category entity.
-	 * @throws Exception
+	 * @throws @{ResourceNotFoundException} if the category is not found.
 	 */
 	@PutMapping("/categories/{id}")
 	public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") Long categoryId, @Valid @RequestBody Category newCategory)
-			throws Exception {
+			throws ResourceNotFoundException {
 
 		Category oldCategory = repo.findById(categoryId).orElseThrow(() ->
 		new ResourceNotFoundException("Category " + categoryId + " not found"));
@@ -82,7 +88,7 @@ public class CategoryController {
 	 * Delete Category.
 	 *
 	 * @param categoryId id of the category to be deleted.
-	 * @throws Exception
+	 * @throws @{ResourceNotFoundException} if the category is not found.
 	 */
 	@DeleteMapping("/categories/{id}")
 	public ResponseEntity<?> updateCategory(@PathVariable(value = "id") Long categoryId) throws ResourceNotFoundException {
