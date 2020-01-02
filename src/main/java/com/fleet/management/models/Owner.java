@@ -53,7 +53,7 @@ public class Owner {
 	 * Set object id.
 	 * This should not be used explicitly, since the id's are auto-generated
 	 *
-	 * @param id
+	 * @param id the id
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -71,7 +71,7 @@ public class Owner {
 	/**
 	 * Set owner name.
 	 *
-	 * @param name
+	 * @param name the owner name.
 	 */
 	public void setName(String name) {
 		this.name = name;

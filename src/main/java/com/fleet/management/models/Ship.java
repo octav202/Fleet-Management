@@ -68,7 +68,7 @@ public class Ship implements Serializable {
 	 * Set object id.
 	 * This should not be used explicitly, since the id's are auto-generated
 	 *
-	 * @param id
+	 * @param id the id
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -104,7 +104,7 @@ public class Ship implements Serializable {
 	/**
 	 * Set ship's IMO number.
 	 *
-	 * @param imoNumber
+	 * @param imoNumber the imoNumber
 	 */
 	public void setImoNumber(String imoNumber) {
 		this.imoNumber = imoNumber;

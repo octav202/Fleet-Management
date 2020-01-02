@@ -69,7 +69,7 @@ public class ShipController {
 	 * @param shipId  id of the ship to be updated.
 	 * @param newShip the new ship.
 	 * @return the updated ship entity.
-	 * @throws @{ResourceNotFoundException} if the ship was not found.
+	 * @throws ResourceNotFoundException if the ship was not found.
 	 */
 	@PutMapping("/ships/{id}")
 	public ResponseEntity<Ship> updateShip(@PathVariable(value = "id") Long shipId, @Valid @RequestBody Ship newShip)
@@ -87,7 +87,8 @@ public class ShipController {
 	 * Delete Ship.
 	 *
 	 * @param shipId id of the ship to be deleted.
-	 * @throws @{ResourceNotFoundException} if the ship was not found.
+	 * @return the response entity
+	 * @throws ResourceNotFoundException if the ship was not found.
 	 */
 	@DeleteMapping("/ships/{id}")
 	public ResponseEntity<?> deleteShip(@PathVariable(value = "id") Long shipId) throws ResourceNotFoundException {

@@ -56,7 +56,7 @@ public class Category implements Serializable {
 	 * Set object id.
 	 * This should not be used explicitly, since the id's are auto-generated
 	 *
-	 * @param id
+	 * @param id the id
 	 */
 	public void setId(long id) {
 		this.id = id;

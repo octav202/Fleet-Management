@@ -55,7 +55,7 @@ public class CategoryController {
 	/**
 	 * Create a category.
 	 *
-	 * @param catehory - category to be added.
+	 * @param category - category to be added.
 	 * @return the category entity.
 	 */
 	@PostMapping("/categories")
@@ -69,7 +69,7 @@ public class CategoryController {
 	 * @param categoryId  id of the category to be updated.
 	 * @param newCategory the new category.
 	 * @return the updated category entity.
-	 * @throws @{ResourceNotFoundException} if the category is not found.
+	 * @throws ResourceNotFoundException if the category is not found.
 	 */
 	@PutMapping("/categories/{id}")
 	public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") Long categoryId, @Valid @RequestBody Category newCategory)
@@ -88,7 +88,8 @@ public class CategoryController {
 	 * Delete Category.
 	 *
 	 * @param categoryId id of the category to be deleted.
-	 * @throws @{ResourceNotFoundException} if the category is not found.
+	 * @return the response entity
+	 * @throws ResourceNotFoundException if the category is not found.
 	 */
 	@DeleteMapping("/categories/{id}")
 	public ResponseEntity<?> updateCategory(@PathVariable(value = "id") Long categoryId) throws ResourceNotFoundException {

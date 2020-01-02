@@ -69,7 +69,7 @@ public class OwnerController {
 	 * @param ownerId  id of the owner to be updated.
 	 * @param newOwner the new owner.
 	 * @return the updated owner entity.
-	 * @throws @{ResourceNotFoundException} if the owner was not found.
+	 * @throws ResourceNotFoundException if the owner was not found.
 	 */
 	@PutMapping("/owners/{id}")
 	public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id") Long ownerId, @Valid @RequestBody Owner newOwner)
@@ -85,7 +85,8 @@ public class OwnerController {
 	 * Delete Owner.
 	 *
 	 * @param ownerId id of the owner to be deleted.
-	 * @throws @{ResourceNotFoundException} if the owner was not found.
+	 * @return the response entity
+	 * @throws ResourceNotFoundException if the owner was not found.
 	 */
 	@DeleteMapping("/owners/{id}")
 	public ResponseEntity<?> deleteOwner(@PathVariable(value = "id") Long ownerId) throws ResourceNotFoundException {
